@@ -6,10 +6,10 @@ async function getReviews(bussiness_name) {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     let jsonData = [];
-    const browser = await puppeteer.launch({ headless: True});
+    const browser = await puppeteer.launch({ headless: true});
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080, devicePixelRatio: 2 });
-    await page.goto(`https://www.google.com/search?q=${bussiness_name}`);
+    await page.goto(`${bussiness_name}`);
     const input = await page.$('.hqzQac');
     await input.click();
 
@@ -78,14 +78,17 @@ async function getReviews(bussiness_name) {
 }
 
 
-fastify.get('/scraped-data/:bussiness_name', async (request, reply) => {
+fastify.post('/scraped-data/', async (request, reply) => {
     try {
-        const {bussiness_name} = request.params;
-        console.log(bussiness_name);
+        // const {bussiness_name} = request.params;
+        // console.log(bussiness_name);
+
+        const { bussiness_name } = request.body;
 
         reviews= await getReviews(bussiness_name);
         
 
+        // reply.send(reviews);
         reply.send(reviews);
 
         
